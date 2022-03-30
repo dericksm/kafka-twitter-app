@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+    zookeeper:
+      image: wurstmeister/zookeeper
+      ports: 
+        - "2181:2181"
+        - "22"
+    kafka:
+        image: wurstmeister/kafka
+        container_name: kafka
+        ports:
+          - "9092:9092"
+        environment:
+          KAFKA_ADVERTISED_HOST_NAME: localhost
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    nimbus:
+      image: wurstmeister/storm-nimbus
+      ports:
+        - "49773:3773"
+        - "49772:3772"
+        - "49627:6627"
+        - "22"
+      links: 
+        - zookeeper:zk
+    supervisor:
+      image: wurstmeister/storm-supervisor
+      ports:
+        - "8000"
+        - "22"
+      links: 
+        - nimbus:nimbus
+        - zookeeper:zk
+    ui:
+      image: wurstmeister/storm-ui
+      ports:
+        - "49080:8080"
+        - "22"
+      links: 
+        - nimbus:nimbus
+        - zookeeper:zk
