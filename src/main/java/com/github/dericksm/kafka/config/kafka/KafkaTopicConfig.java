@@ -1,4 +1,4 @@
-package com.github.dericksm.kafka.config;
+package com.github.dericksm.kafka.config.kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
@@ -9,8 +9,10 @@ import org.springframework.kafka.config.TopicBuilder;
 public class KafkaTopicConfig {
 
     @Bean
-    public NewTopic derickTopic() {
-        return TopicBuilder.name("derick")
+    public NewTopic twitterTopic() {
+        return TopicBuilder
+                .name("tweets-topic")
+                .replicas(1)
                 .build();
     }
 }
